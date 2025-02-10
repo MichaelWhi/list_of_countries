@@ -45,6 +45,21 @@ aruba.demonyms.female # => "Aruban"
 aruba.demonyms.male   # => "Aruban"
 ```
 
+How many cities or states are in the US?
+
+``` ruby
+us = ListOfCountries.country_by_code "US"
+# us = ListOfCountries.country_by_name "United States" # would also be possible
+us.cities.count # => 19823
+us.states.count # => 66 # (states plus territories)
+us.cities.first.to_s # => "Abbeville"
+us.cities.first.state.to_s # => "Alabama"
+
+al = us.states.first
+al.to_s # => "Alabama"
+al.cities.size # => 378
+```
+
 How many states are there?
 
 ``` ruby
@@ -58,6 +73,7 @@ What's the first state?
 state = states.first
 state.name # => "Badakhshan"
 state.code # => "BDS"
+state.country.to_s # => "Afghanistan" 
 ```
 
 How many cities are there?
@@ -72,6 +88,82 @@ What's the first city?
 ``` ruby
 city = cities.first
 city.name # => "Ashkāsham"
+city.state.to_s # => "Badakhshan"
+city.country # => "Afghanistan"
+```
+
+<details>
+
+<summary>More country info with the countries gem</summary>
+
+Get more country info using the [countries gem](https://github.com/countries/countries/). You have to install it, first.
+
+Then, Just call the `iso_country` method on a `Country` object:
+
+``` ruby
+us = ListOfCountries.country_by_code "US"
+us.iso_country # =>
+# <ISO3166::Country:xxx
+#  @country_data_or_code=
+#   {"address_format" => "{{recipient}}\n{{street}}\n{{city}} {{region_short}} {{postalcode}}\n{{country}}",
+#    "alpha2" => "US",
+#    "alpha3" => "USA",
+#    "continent" => "North America",
+#    "country_code" => "1",
+#    "currency_code" => "USD",
+#    "distance_unit" => "MI",
+#    "g20_member" => true,
+#    "g7_member" => true,
+#    "gec" => "US",
+#    "geo" =>
+#     {"latitude" => 37.09024,
+#      "longitude" => -95.712891,
+#      "max_latitude" => 71.3577635769,
+#      "max_longitude" => -66.96466,
+#      "min_latitude" => 18.91619,
+#      "min_longitude" => -171.791110603,
+#      "bounds" => {"northeast" => {"lat" => 71.3577635769, "lng" => -66.96466}, "southwest" => {"lat" => 18.91619, "lng" => -171.791110603}}},
+#    "international_prefix" => "011",
+#    "ioc" => "USA",
+#    "iso_long_name" => "The United States of America",
+#    "iso_short_name" => "United States of America",
+#    "languages_official" => ["en"],
+#    "languages_spoken" => ["en"],
+#    "national_destination_code_lengths" => [3],
+#    "national_number_lengths" => [10],
+#    "national_prefix" => "1",
+#    "nationality" => "American",
+#    "number" => "840",
+#    "postal_code" => true,
+#    "postal_code_format" => "(\\d{5})(?:[ \\-](\\d{4}))?",
+#    "region" => "Americas",
+#    "start_of_week" => "sunday",
+#    "subregion" => "Northern America",
+#    "un_locode" => "US",
+#    "un_member" => true,
+#    "unofficial_names" =>
+#     ["United States", "USA", "Vereinigte Staaten von Amerika", "États-Unis", "Estados Unidos", "アメリカ合衆国", "Verenigde Staten", "Соединенные Штаты Америки"],
+#    "vehicle_registration_code" => "USA",
+#    "world_region" => "AMER",
+#    "translations" => {"en" => "United States", "de" => "Vereinigte Staaten"},
+#    "translated_names" => ["United States", "Vereinigte Staaten"]},
+```
+
+</details>
+
+
+### Compatibility with older versions
+
+If you want to reduce memory usage and the behavior of versions prior to 2.1.0, you can block some attributes from being imported. Then, however, no connection between cities, states and countries is established. Use that lightweight mode if you only want simple lists without references. The corresponding methods will not work and return `nil` or an empty array:
+
+``` ruby
+ListOfCountries.lightweight! # run this before any other call, now less data will be imported.
+
+us = ListOfCountries.country_by_code "US"
+us.to_s # => "United States"
+us.cities # => [] # this information now is not present, the array is empty.
+us.states # => []
+ListOfCountries.cities.first.country # => nil
 ```
 
 ## Development

@@ -20,7 +20,8 @@ class ListOfCountriesCountriesTest < Minitest::Test
   end
 
   def test_australia
-    country = @countries.find { |c| c.name.common == "Australia" }
+    country = ListOfCountries.country_by_name("Australia")
+    assert_equal(@countries.find { |c| c.name.common == "Australia" }, country)
     assert_equal("Australia", country.name.common)
     assert_equal("Commonwealth of Australia", country.name.official)
     assert_equal("Australian", country.demonyms.female)
@@ -28,10 +29,12 @@ class ListOfCountriesCountriesTest < Minitest::Test
     assert_equal(["English"], country.languages)
     assert_equal("Oceania", country.region)
     assert_equal("Australia and New Zealand", country.subregion)
+    refute_nil(country.city_by_name("Sydney"))
   end
 
   def test_hong_kong
-    country = @countries.find { |c| c.name.common == "Hong Kong" }
+    country = ListOfCountries.country_by_name("Hong Kong")
+    assert_equal(@countries.find { |c| c.name.common == "Hong Kong" }, country)
     assert_equal("Hong Kong", country.name.common)
     assert_equal("Hong Kong Special Administrative Region of the People's Republic of China", country.name.official)
     assert_equal("Hong Konger", country.demonyms.female)

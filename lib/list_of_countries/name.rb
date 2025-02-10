@@ -9,5 +9,9 @@ module ListOfCountries
       @common = data.fetch("common")
       @official = data.fetch("official")
     end
+
+    def to_s
+      common
+    end
   end
 end

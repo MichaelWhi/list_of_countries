@@ -19,12 +19,16 @@ module ListOfCountries
       end
     end
 
+    def to_s
+      name.to_s
+    end
+
     def country
-      ListOfCountries.countries.find { |c| c.code == country_code }
+      ListOfCountries.country_by_code(country_code)
     end
 
     def state
-      ListOfCountries.states.find { |s| s.code == state_code && s.country_code == country_code }
+      country&.state_by_code(state_code)
     end
   end
 end

@@ -33,15 +33,37 @@ module ListOfCountries
       ListOfCountries.states.filter { |state| state.country_code == code }
     end
 
+    def to_s
+      name.to_s
+    end
+
+    ##
+    # Find the first matching city in this country by its name
+    def city_by_name(city_name)
+      cities.find { |city| city.name == city_name.strip}
+    end
+
+    ##
+    # Find the first matching state in this country by its name
+    def state_by_name(state_name)
+      states.find { |state| state.name == state_name.strip}
+    end
+
+    ##
+    # Find the first matching state in this country by its state code
+    def state_by_code(state_code)
+      states.find { |state| state.code == state_code.strip}
+    end
+
     ##
     # This method returns the corresponding `ISO3166::Country` object, if the 'countries' gem
     # from https://github.com/countries/countries/ is installed.
     # The returned object then contains additional information (phone codes, currency, geo information, address schemas, VAT info and more).
     def iso_country
-      if defined?(ISO3166::Country)
-        ISO3166::Country.find_country_by_alpha2(code)
+      if defined?(::ISO3166::Country)
+        ::ISO3166::Country.find_country_by_alpha2(code)
       else
-        raise "To get more country information from the 'country' gem (https://github.com/countries/countries/), please install it first."
+        raise "To get more country information from the 'countries' gem (https://github.com/countries/countries/), please install it first."
       end
     end
 

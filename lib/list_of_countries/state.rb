@@ -8,19 +8,28 @@ module ListOfCountries
 
     def initialize(data, lightweight = ListOfCountries.lightweight?)
       @name = data.fetch("name")
+      @code = data.fetch("state_code")
 
-      unless lightweight
-        @country_code = data.fetch("country_code")
-        @code = data.fetch("state_code")
-      end
+      @country_code = data.fetch("country_code") unless lightweight
+    end
+
+    def to_s
+      name.to_s
     end
 
     def country
-      ListOfCountries.countries.find { |c| c.code == country_code }
+      ListOfCountries.country_by_code(country_code)
     end
 
     def cities
-      ListOfCountries.cities.filter { |city| city.state_code == code && city.country_code == country_code }
+      found = country&.cities&.filter { |city| !city.state_code.nil? && city.state_code == code }
+      found.nil? ? [] : found
+    end
+
+    ##
+    # Find the first matching city in this state by its name
+    def city_by_name(city_name)
+      cities.find { |city| city.name == city_name.strip}
     end
   end
 end
