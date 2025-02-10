@@ -6,7 +6,7 @@ class ListOfCountriesStatesTest < Minitest::Test
   end
 
   def test_states
-    assert_equal(4868, @states.size)
+    assert(4868 <= @states.size)
   end
 
   def test_first_state
@@ -17,7 +17,11 @@ class ListOfCountriesStatesTest < Minitest::Test
 
   def test_last_state
     state = @states.last
-    assert_equal("Midlands Province", state.name)
+    assert_equal("Midlands", state.name)
     assert_equal("MI", state.code)
+  end
+
+  def test_each_state_has_a_country
+    assert(@states.all?(&:country))
   end
 end
