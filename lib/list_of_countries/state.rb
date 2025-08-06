@@ -8,7 +8,7 @@ module ListOfCountries
 
     def initialize(data, lightweight = ListOfCountries.lightweight?)
       @name = data.fetch("name")
-      @code = data.fetch("state_code")
+      @code = data.fetch("iso2")
 
       @country_code = data.fetch("country_code") unless lightweight
     end
